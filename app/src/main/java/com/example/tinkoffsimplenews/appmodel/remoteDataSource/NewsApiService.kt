@@ -1,4 +1,4 @@
-package com.example.tinkoffsimplenews.appmodel
+package com.example.tinkoffsimplenews.appmodel.remoteDataSource
 
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewsResultPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsResultPOJO
@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Inject
 
-object NewsApiService{
+class NewsApiService @Inject constructor(){
     private val service = Retrofit.Builder()
         .baseUrl("https://api.tinkoff.ru/v1/")
         .addConverterFactory(GsonConverterFactory.create())

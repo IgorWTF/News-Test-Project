@@ -44,7 +44,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             override fun onError(e: Throwable) {
                 newsPreviewsDataState.value = DataLoadState.Error
                 Log.d("MAIN_VIEW_MODEL", "getNewsPreviews: Error")
-                Log.d("MAIN_VIEW_MODEL", e.message)
+                Log.d("MAIN_VIEW_MODEL", e.message.toString())
             }
         }
 
@@ -71,7 +71,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             override fun onError(e: Throwable) {
                 Log.d("MAIN_VIEW_MODEL", "getNews: Error")
                 newsDataState.value = DataLoadState.Error
-                Log.d("MAIN_VIEW_MODEL", e.message)
+                Log.d("MAIN_VIEW_MODEL", e.message.toString())
             }
         }
 
@@ -99,7 +99,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             override fun onError(e: Throwable) {
                 newsPreviewsDataState.value = DataLoadState.Error
                 Log.d("MAIN_VIEW_MODEL", "updateNewsPreviews: Error")
-                Log.d("MAIN_VIEW_MODEL", e.message)
+                Log.d("MAIN_VIEW_MODEL", e.message.toString())
             }
         }
 
@@ -125,7 +125,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             }
             override fun onError(e: Throwable) {
                 Log.d("MAIN_VIEW_MODEL", "updateNews: Error")
-                Log.d("MAIN_VIEW_MODEL", e.message)
+                Log.d("MAIN_VIEW_MODEL", e.message.toString())
                 newsDataState.value = DataLoadState.Error
             }
         }

@@ -1,4 +1,4 @@
-package com.example.tinkoffsimplenews.appmodel
+package com.example.tinkoffsimplenews.appmodel.remoteDataSource
 
 import android.util.Log
 import com.example.tinkoffsimplenews.datapojo.NewsPOJO
@@ -6,6 +6,10 @@ import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
 import io.reactivex.Maybe
 
 class RemoteDataSource {
+
+    // Private Fields
+    private val newsApiService = NewsApiService()
+
     // Public Fun
     fun getNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
         return Maybe.just(Unit)
@@ -18,7 +22,8 @@ class RemoteDataSource {
 
     // Private Fun
     private fun loadNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
-        val response = NewsApiService.loadNewsPreviews()
+        val response =
+            newsApiService.loadNewsPreviews()
 
         if (response.code() in 200..299)
             if (response.body()?.resultCode == "OK") {
@@ -30,7 +35,8 @@ class RemoteDataSource {
         return  Maybe.empty()
     }
     private fun loadNews(newsId: Long): Maybe<NewsPOJO> {
-        val response = NewsApiService.loadNews(newsId)
+        val response =
+            newsApiService.loadNews(newsId)
 
         if (response.code() in 200..299)
             if (response.body()?.resultCode == "OK") {

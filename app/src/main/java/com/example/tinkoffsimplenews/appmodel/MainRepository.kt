@@ -6,6 +6,8 @@ import android.net.NetworkInfo
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.tinkoffsimplenews.appmodel.localDataSource.LocalDataSource
+import com.example.tinkoffsimplenews.appmodel.remoteDataSource.RemoteDataSource
 import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
 import io.reactivex.Maybe
@@ -13,8 +15,12 @@ import io.reactivex.Maybe
 
 class MainRepository(private val application: Application) {
     // Private Fields
-    private val localDataSource = LocalDataSource(application)
-    private val remoteDataSource = RemoteDataSource()
+    private val localDataSource =
+        LocalDataSource(
+            application
+        )
+    private val remoteDataSource =
+        RemoteDataSource()
 
     // Public Fun
     fun getNewsPreviews(): Maybe<List<NewsPreview>> {

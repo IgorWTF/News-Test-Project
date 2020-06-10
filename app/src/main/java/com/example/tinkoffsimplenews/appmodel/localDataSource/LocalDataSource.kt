@@ -1,4 +1,4 @@
-package com.example.tinkoffsimplenews.appmodel
+package com.example.tinkoffsimplenews.appmodel.localDataSource
 
 import android.app.Application
 import android.util.Log
@@ -10,8 +10,8 @@ import io.reactivex.Maybe
 
 class LocalDataSource(private val application: Application) {
     // Private Fields
-    private val cacheDataBase: CacheDataBase =
-        Room.databaseBuilder(application, CacheDataBase::class.java, "CacheDataBase").build()
+    private val newsDataBase: NewsDataBase =
+        Room.databaseBuilder(application, NewsDataBase::class.java, "CacheDataBase").build()
 
     // Public Fun
     fun getNewsPreviews() : Maybe<List<NewsPreviewEntity>> {
@@ -32,7 +32,7 @@ class LocalDataSource(private val application: Application) {
 
     // Private Fun
     private fun loadNewsPreviews() : Maybe<List<NewsPreviewEntity>> {
-        val newsPreviews = cacheDataBase.NewsPreviewDao()?.getNewsPreview()
+        val newsPreviews = newsDataBase.newsPreviewDao()?.getNewsPreview()
 
         if (newsPreviews != null) {
             if(newsPreviews.isNotEmpty()) {
@@ -45,7 +45,7 @@ class LocalDataSource(private val application: Application) {
         return Maybe.empty()
     }
     private fun loadNews(newsId:Long): Maybe<NewsEntity> {
-        val news = cacheDataBase.NewsDao()?.getNews(newsId)
+        val news = newsDataBase.newsDao()?.getNews(newsId)
 
         if (news != null) {
             Log.d("LOCAL_DATA_SOURCE", "loadNewsPreviews: Success")
@@ -57,9 +57,9 @@ class LocalDataSource(private val application: Application) {
     }
 
     private fun saveNewsPreviewsToBd(newsPreviewsEntity:List<NewsPreviewEntity>) {
-        cacheDataBase.NewsPreviewDao()?.saveNewsPreviews(newsPreviewsEntity)
+        newsDataBase.newsPreviewDao()?.saveNewsPreviews(newsPreviewsEntity)
     }
     private fun saveNewsToBd(news: NewsEntity) {
-        cacheDataBase.NewsDao()?.saveNews(news)
+        newsDataBase.newsDao()?.saveNews(news)
     }
 }

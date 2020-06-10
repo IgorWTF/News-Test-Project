@@ -1,4 +1,4 @@
-package com.example.tinkoffsimplenews.appmodel
+package com.example.tinkoffsimplenews.appmodel.localDataSource
 
 import androidx.room.*
 import com.example.tinkoffsimplenews.dataentity.NewsEntity
