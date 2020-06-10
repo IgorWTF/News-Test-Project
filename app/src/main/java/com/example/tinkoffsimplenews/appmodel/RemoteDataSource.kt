@@ -18,7 +18,7 @@ class RemoteDataSource {
 
     // Private Fun
     private fun loadNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
-        val response = TinkoffApiService.loadNewsPreviews()
+        val response = NewsApiService.loadNewsPreviews()
 
         if (response.code() in 200..299)
             if (response.body()?.resultCode == "OK") {
@@ -30,7 +30,7 @@ class RemoteDataSource {
         return  Maybe.empty()
     }
     private fun loadNews(newsId: Long): Maybe<NewsPOJO> {
-        val response = TinkoffApiService.loadNews(newsId)
+        val response = NewsApiService.loadNews(newsId)
 
         if (response.code() in 200..299)
             if (response.body()?.resultCode == "OK") {

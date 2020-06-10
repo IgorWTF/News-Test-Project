@@ -8,21 +8,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import javax.inject.Inject
 
-object TinkoffApiService {
-    private val service: APIService
+object NewsApiService{
+    private val service = Retrofit.Builder()
+        .baseUrl("https://api.tinkoff.ru/v1/")
+        .addConverterFactory(GsonConverterFactory.create())
+        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build().create(APIService::class.java)
 
-    init {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.tinkoff.ru/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-
-        service = retrofit.create(APIService::class.java)
-    }
-
-    fun loadNewsPreviews() : Response<NewsPreviewsResultPOJO?>{
+    fun loadNewsPreviews(): Response<NewsPreviewsResultPOJO?> {
         return service.getNewsPreviews().execute()
     }
 
@@ -35,6 +30,6 @@ object TinkoffApiService {
         fun getNewsPreviews(): Call<NewsPreviewsResultPOJO?>
 
         @GET("https://api.tinkoff.ru/v1/news_content/")
-        fun getNews(@Query("id")newsId:Long) : Call<NewsResultPOJO?>
+        fun getNews(@Query("id") newsId: Long): Call<NewsResultPOJO?>
     }
 }
