@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    // Private Fields
     private val newsPreviews = ArrayList<NewsPreview>()
 
     private lateinit var emptyContentLayout: FrameLayout
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var newsViewModel: NewsViewModel
     private lateinit var newsRvAdapter: NewsRvAdapter
 
+    // AppCompatActivity implementation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         onDataStatusChange()
     }
 
+    // Private Fun
     private fun setupUI(){
         emptyContentLayout = mainLayout.emptyContentLayout
         contentLayout = mainLayout.contentLayout

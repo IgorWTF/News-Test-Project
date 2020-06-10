@@ -1,10 +1,7 @@
 package com.example.tinkoffsimplenews.appmodel.localDataSource
 
-import android.app.Application
 import android.util.Log
-import androidx.room.Room
 import com.example.tinkoffsimplenews.app.App
-import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsApiService
 import com.example.tinkoffsimplenews.dataentity.NewsEntity
 import com.example.tinkoffsimplenews.dataentity.NewsPreviewEntity
 import io.reactivex.Maybe
@@ -19,6 +16,12 @@ class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
 
     // Public Fields
     @Inject lateinit var newsDataBase: NewsDataBase
+
+    // Private Fields
+    private var isLoadedNewsPreviews = false
+
+    private var loadedNewsPreviews = ArrayList<NewsPreviewEntity>()
+    private val loadeNews = HashMap<Long, NewsEntity>()
 
     // NewsLocalDataSource Implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreviewEntity>> {
@@ -41,12 +44,20 @@ class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
 
     // Private Fun
     private fun loadNewsPreviews(): Maybe<List<NewsPreviewEntity>> {
-        val newsPreviews = newsDataBase.newsPreviewDao()?.getNewsPreview()
+        if(isLoadedNewsPreviews) {
+            return Maybe.just(loadedNewsPreviews)
+        }
+        else {
+            val newsPreviews = newsDataBase.newsPreviewDao()?.getNewsPreview()
 
-        if (newsPreviews != null) {
-            if (newsPreviews.isNotEmpty()) {
-                Log.d("LOCAL_DATA_SOURCE", "loadNewsPreviews: Success")
-                return Maybe.just(newsPreviews)
+            if (newsPreviews != null) {
+                if (newsPreviews.isNotEmpty()) {
+                    Log.d("LOCAL_DATA_SOURCE", "loadNewsPreviews: Success")
+
+                    isLoadedNewsPreviews = true
+                    loadedNewsPreviews.addAll(newsPreviews)
+                    return Maybe.just(newsPreviews)
+                }
             }
         }
 
@@ -55,11 +66,17 @@ class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
     }
 
     private fun loadNews(newsId: Long): Maybe<NewsEntity> {
-        val news = newsDataBase.newsDao()?.getNews(newsId)
+        if(loadeNews.containsKey(newsId)){
+            return Maybe.just(loadeNews[newsId])
+        } else {
+            val news = newsDataBase.newsDao()?.getNews(newsId)
 
-        if (news != null) {
-            Log.d("LOCAL_DATA_SOURCE", "loadNewsPreviews: Success")
-            return Maybe.just(news)
+            if (news != null) {
+                Log.d("LOCAL_DATA_SOURCE", "loadNewsPreviews: Success")
+
+                loadeNews[newsId] = news
+                return Maybe.just(news)
+            }
         }
 
         Log.d("LOCAL_DATA_SOURCE", "loadNews: Empty")
@@ -67,10 +84,14 @@ class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
     }
 
     private fun saveNewsPreviewsToBd(newsPreviewsEntity: List<NewsPreviewEntity>) {
+        isLoadedNewsPreviews = true
+        loadedNewsPreviews = ArrayList(newsPreviewsEntity)
+
         newsDataBase.newsPreviewDao()?.saveNewsPreviews(newsPreviewsEntity)
     }
 
     private fun saveNewsToBd(news: NewsEntity) {
+        loadeNews[news.id] = news
         newsDataBase.newsDao()?.saveNews(news)
     }
 }
