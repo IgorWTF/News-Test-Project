@@ -14,6 +14,8 @@ import com.example.tinkoffsimplenews.appmodel.remoteDataSource.MainApiService
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.MainRemoteDataSource
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsApiService
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
+import com.example.tinkoffsimplenews.service.MainNetService
+import com.example.tinkoffsimplenews.service.NetService
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -43,4 +45,8 @@ class AppModule(private val application:Application) {
     @Singleton
     @Provides
     fun provideNewsDataBase(): NewsDataBase = Room.databaseBuilder(application, MainDataBase::class.java, "NewsDataBase").build()
+
+    @Singleton
+    @Provides
+    fun provideNetService(): NetService = MainNetService()
 }

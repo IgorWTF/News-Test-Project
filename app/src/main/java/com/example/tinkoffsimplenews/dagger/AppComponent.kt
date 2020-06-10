@@ -4,6 +4,7 @@ import com.example.tinkoffsimplenews.appmodel.MainRepository
 import com.example.tinkoffsimplenews.appmodel.localDataSource.MainLocalDataSource
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.MainRemoteDataSource
 import com.example.tinkoffsimplenews.appviewmodel.MainViewModel
+import com.example.tinkoffsimplenews.service.MainNetService
 import dagger.Component
 import javax.inject.Singleton
 
@@ -14,4 +15,5 @@ interface AppComponent {
     fun inject(mainViewModel: MainViewModel)
     fun inject(mainLocalDataSource: MainLocalDataSource)
     fun inject(mainRemoteDataSource: MainRemoteDataSource)
+    fun inject(mainNetService: MainNetService)
 }

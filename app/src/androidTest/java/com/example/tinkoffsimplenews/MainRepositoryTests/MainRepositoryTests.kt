@@ -1,7 +1,6 @@
-package com.example.tinkoffsimplenews.mainrepository
+package com.example.tinkoffsimplenews.MainRepositoryTests
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.example.tinkoffsimplenews.appmodel.MainRepository
 import com.example.tinkoffsimplenews.appmodel.localDataSource.NewsLocalDataSource
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
@@ -9,6 +8,7 @@ import com.example.tinkoffsimplenews.dataentity.NewsEntity
 import com.example.tinkoffsimplenews.dataentity.NewsPreviewEntity
 import com.example.tinkoffsimplenews.datapojo.NewsPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
+import com.example.tinkoffsimplenews.service.NetService
 import io.reactivex.Maybe
 import org.junit.Assert
 import org.junit.Test
@@ -18,9 +18,7 @@ import org.junit.runner.RunWith
 class MainRepositoryTests {
     @Test
     fun getNewsPreviewsIfLocalDSourceEmptyThenRemoteDataSource() {
-        val appContext = InstrumentationRegistry.getInstrumentation().context
-
-        val fakeLocalDataSource = object : NewsLocalDataSource {
+        val fakeLDataSource = object : NewsLocalDataSource {
 
             var hasNewsPreviewsRequest = false
 
@@ -43,7 +41,7 @@ class MainRepositoryTests {
 
         }
 
-        val fakeRemoteDataSource = object : NewsRemoteDataSource {
+        val fakeRDataSource = object : NewsRemoteDataSource {
 
             var hasNewsPreviewsRequested = false
 
@@ -58,27 +56,29 @@ class MainRepositoryTests {
 
         }
 
+        val fakeNetService = object :NetService {
+            override fun hasNetwork(): Boolean {
+                return true
+            }
+        }
+
         val mainRepository = MainRepository()
 
         mainRepository.apply {
-            this.appContext = appContext
-            newsLocalDataSource = fakeLocalDataSource
-            newsRemoteDataSource = fakeRemoteDataSource
+            netService = fakeNetService
+            newsLocalDataSource = fakeLDataSource
+            newsRemoteDataSource = fakeRDataSource
         }
 
         mainRepository.getNewsPreviews()
 
-        Assert.assertTrue(
-            fakeLocalDataSource.hasNewsPreviewsRequest &&
-                    fakeRemoteDataSource.hasNewsPreviewsRequested
-        )
+        Assert.assertTrue(fakeLDataSource.hasNewsPreviewsRequest &&
+                            fakeRDataSource.hasNewsPreviewsRequested)
     }
 
     @Test
     fun getNewsIfLocalDSourceEmptyThenRemoteDataSource() {
-        val appContext = InstrumentationRegistry.getInstrumentation().context
-
-        val fakeLocalDataSource = object : NewsLocalDataSource {
+        val fakeLDataSource = object : NewsLocalDataSource {
 
             var hasNewsRequest = false
 
@@ -98,7 +98,7 @@ class MainRepositoryTests {
 
         }
 
-        val fakeRemoteDataSource = object : NewsRemoteDataSource {
+        val fakeRDataSource = object : NewsRemoteDataSource {
 
             var hasNewsRequested = false
             override fun getNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
@@ -111,19 +111,23 @@ class MainRepositoryTests {
 
         }
 
+        val fakeNetService = object :NetService {
+            override fun hasNetwork(): Boolean {
+                return true
+            }
+        }
+
         val mainRepository = MainRepository()
 
         mainRepository.apply {
-            this.appContext = appContext
-            newsLocalDataSource = fakeLocalDataSource
-            newsRemoteDataSource = fakeRemoteDataSource
+            netService = fakeNetService
+            newsLocalDataSource = fakeLDataSource
+            newsRemoteDataSource = fakeRDataSource
         }
 
         mainRepository.getNews(123)
 
-        Assert.assertTrue(
-            fakeLocalDataSource.hasNewsRequest &&
-                    fakeRemoteDataSource.hasNewsRequested
-        )
+        Assert.assertTrue(fakeLDataSource.hasNewsRequest &&
+                            fakeRDataSource.hasNewsRequested)
     }
 }

@@ -12,6 +12,7 @@ import com.example.tinkoffsimplenews.appmodel.localDataSource.NewsLocalDataSourc
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
 import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
+import com.example.tinkoffsimplenews.service.NetService
 import io.reactivex.Maybe
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     }
 
     // Public Fields
-    @Inject lateinit var appContext: Context
+    @Inject lateinit var netService: NetService
     @Inject lateinit var newsLocalDataSource: NewsLocalDataSource
     @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
 
@@ -53,8 +54,8 @@ class MainRepository @Inject constructor() : NewsRepository {
     }
 
     override fun updateNewsPreviews():  Maybe<List<NewsPreview>> {
-        if (!hasNetwork()) {
-            Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
+        if (!netService.hasNetwork()) {
+            //Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNewsPreviews()
                 .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
                 .map { sortNewsPreviewsByPublicationDate(it) }
@@ -66,8 +67,8 @@ class MainRepository @Inject constructor() : NewsRepository {
             .map { sortNewsPreviewsByPublicationDate(it) }
     }
     override fun updateNews(newsId: Long):  Maybe<News>{
-        if(!hasNetwork()) {
-            Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
+        if(!netService.hasNetwork()) {
+            //Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNews(newsId)
                 .map { DataMapperService.mapNewsEntityToModel(it) }
         }
@@ -90,11 +91,5 @@ class MainRepository @Inject constructor() : NewsRepository {
     private fun saveNewsToLocalDataSource(news: News) {
         newsLocalDataSource
             .saveNews(DataMapperService.mapNewsModelToEntity(news))
-    }
-
-    private fun hasNetwork(): Boolean {
-        val connMgr = getSystemService(appContext,ConnectivityManager::class.java)
-        val networkInfo: NetworkInfo? = connMgr?.activeNetworkInfo
-        return networkInfo?.isConnected == true
     }
 }
