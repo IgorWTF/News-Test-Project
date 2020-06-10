@@ -1,6 +1,7 @@
 package com.example.tinkoffsimplenews.appmodel.remoteDataSource
 
 import android.util.Log
+import com.example.tinkoffsimplenews.app.App
 import com.example.tinkoffsimplenews.datapojo.NewsPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
 import io.reactivex.Maybe
@@ -8,10 +9,15 @@ import javax.inject.Inject
 
 class MainRemoteDataSource @Inject constructor() : NewsRemoteDataSource {
 
-    // Private Fields
-    private val newsApiService = NewsApiService()
+    // Init
+    init {
+        App.appComponent.inject(this)
+    }
 
-    // Public Fun
+    // Public Fields
+    @Inject lateinit var newsApiService:NewsApiService
+
+    // NewsRemoteDataSource implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
         return Maybe.just(Unit)
             .flatMap { loadNewsPreviews() }

@@ -27,7 +27,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
 
 
-    // Public Fun
+    // NewsRepository implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreview>> {
         Log.d("MAIN_REPOSITORY", "getNewsPreviews")
         return newsLocalDataSource.getNewsPreviews()

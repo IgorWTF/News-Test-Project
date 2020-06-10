@@ -3,17 +3,22 @@ package com.example.tinkoffsimplenews.appmodel.localDataSource
 import android.app.Application
 import android.util.Log
 import androidx.room.Room
+import com.example.tinkoffsimplenews.app.App
+import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsApiService
 import com.example.tinkoffsimplenews.dataentity.NewsEntity
 import com.example.tinkoffsimplenews.dataentity.NewsPreviewEntity
 import io.reactivex.Maybe
 import javax.inject.Inject
 
 
-class MainLocalDataSource @Inject constructor(private val application: Application):
-    NewsLocalDataSource {
-    // Private Fields
-    private val newsDataBase: NewsDataBase =
-        Room.databaseBuilder(application, NewsDataBase::class.java, "CacheDataBase").build()
+class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
+    // Init
+    init {
+        App.appComponent.inject(this)
+    }
+
+    // Public Fields
+    @Inject lateinit var newsDataBase: NewsDataBase
 
     // NewsLocalDataSource Implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreviewEntity>> {

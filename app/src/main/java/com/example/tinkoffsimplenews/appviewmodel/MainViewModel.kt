@@ -26,14 +26,15 @@ class MainViewModel(application: Application): AndroidViewModel(application), Ne
     // Public Fields
     @Inject lateinit var newsRepository: NewsRepository
 
+    // Private Fields
+    private val compositeDisposable = CompositeDisposable()
+
+    // NewsViewModel implementation
     override var newsPreviewsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
     override var newsPreviewsData = ArrayList<NewsPreview>()
 
     override var newsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
     override var newsData = News()
-
-    // Private Fields
-    private val compositeDisposable = CompositeDisposable()
 
     // Public Fun
     override fun getNewsPreviews() {
