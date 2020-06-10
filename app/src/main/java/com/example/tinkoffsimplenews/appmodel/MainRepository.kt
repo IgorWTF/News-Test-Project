@@ -6,67 +6,72 @@ import android.net.NetworkInfo
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
-import com.example.tinkoffsimplenews.appmodel.localDataSource.LocalDataSource
-import com.example.tinkoffsimplenews.appmodel.remoteDataSource.RemoteDataSource
+import com.example.tinkoffsimplenews.app.App
+import com.example.tinkoffsimplenews.appmodel.localDataSource.NewsLocalDataSource
+import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
 import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
 import io.reactivex.Maybe
+import javax.inject.Inject
 
 
-class MainRepository(private val application: Application) {
-    // Private Fields
-    private val localDataSource =
-        LocalDataSource(
-            application
-        )
-    private val remoteDataSource =
-        RemoteDataSource()
+class MainRepository @Inject constructor() : NewsRepository {
+    // Init
+    init {
+        App.appComponent.inject(this)
+    }
+
+    // Public Fields
+    @Inject lateinit var application: Application
+    @Inject lateinit var newsLocalDataSource: NewsLocalDataSource
+    @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
+
 
     // Public Fun
-    fun getNewsPreviews(): Maybe<List<NewsPreview>> {
+    override fun getNewsPreviews(): Maybe<List<NewsPreview>> {
         Log.d("MAIN_REPOSITORY", "getNewsPreviews")
-        return localDataSource.getNewsPreviews()
+        return newsLocalDataSource.getNewsPreviews()
             .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
             .map { sortNewsPreviewsByPublicationDate(it) }
             .switchIfEmpty(
-                remoteDataSource.getNewsPreviews()
+                newsRemoteDataSource.getNewsPreviews()
                     .map { DataMapperService.mapNewsPreviewPojoToModel(it) }
                     .doOnSuccess { saveNewsPreviewsToLocalDataSource(it) }
                     .map { sortNewsPreviewsByPublicationDate(it) }
             )
     }
-    fun getNews(newsId: Long):  Maybe<News> {
+    override fun getNews(newsId: Long):  Maybe<News> {
         Log.d("MAIN_REPOSITORY", "getNews")
-        return localDataSource.getNews(newsId)
+        return newsLocalDataSource.getNews(newsId)
             .map { DataMapperService.mapNewsEntityToModel(it) }
             .switchIfEmpty(
-                remoteDataSource.getNews(newsId)
+                newsRemoteDataSource.getNews(newsId)
                     .map { DataMapperService.mapNewsPojoToModel(it) }
                     .doOnSuccess { saveNewsToLocalDataSource(it) }
             )
     }
 
-    fun updateNewsPreviews():  Maybe<List<NewsPreview>> {
+    override fun updateNewsPreviews():  Maybe<List<NewsPreview>> {
         if (!hasNetwork()) {
             Toast.makeText(application, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
-            return localDataSource.getNewsPreviews()
+            return newsLocalDataSource.getNewsPreviews()
                 .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
                 .map { sortNewsPreviewsByPublicationDate(it) }
         }
 
-        return remoteDataSource.getNewsPreviews()
+        return newsRemoteDataSource.getNewsPreviews()
             .map { DataMapperService.mapNewsPreviewPojoToModel(it) }
             .doOnSuccess { saveNewsPreviewsToLocalDataSource(it) }
             .map { sortNewsPreviewsByPublicationDate(it) }
     }
-    fun updateNews(newsId: Long):  Maybe<News>{
+    override fun updateNews(newsId: Long):  Maybe<News>{
         if(!hasNetwork()) {
             Toast.makeText(application, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
-            return localDataSource.getNews(newsId)
+            return newsLocalDataSource.getNews(newsId)
                 .map { DataMapperService.mapNewsEntityToModel(it) }
         }
 
-        return remoteDataSource.getNews(newsId)
+        return newsRemoteDataSource.getNews(newsId)
             .map { DataMapperService.mapNewsPojoToModel(it) }
             .doOnSuccess { saveNewsToLocalDataSource(it) }
     }
@@ -78,11 +83,11 @@ class MainRepository(private val application: Application) {
     }
 
     private fun saveNewsPreviewsToLocalDataSource(newsPreviews: List<NewsPreview>) {
-        localDataSource
+        newsLocalDataSource
             .saveNewsPreviews(DataMapperService.mapNewsPreviewModelToEntity(newsPreviews))
     }
     private fun saveNewsToLocalDataSource(news: News) {
-        localDataSource
+        newsLocalDataSource
             .saveNews(DataMapperService.mapNewsModelToEntity(news))
     }
 

@@ -4,31 +4,39 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.tinkoffsimplenews.app.App
 import com.example.tinkoffsimplenews.appmodel.MainRepository
+import com.example.tinkoffsimplenews.appmodel.NewsRepository
 import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableMaybeObserver
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
+class MainViewModel(application: Application): AndroidViewModel(application), NewsViewModel {
+
+    // Init
+    init {
+        App.appComponent.inject(this)
+    }
 
     // Public Fields
-    var newsPreviewsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
-    var newsPreviewsData = ArrayList<NewsPreview>()
+    @Inject lateinit var newsRepository: NewsRepository
 
-    var newsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
-    var newsData = News()
+    override var newsPreviewsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
+    override var newsPreviewsData = ArrayList<NewsPreview>()
+
+    override var newsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
+    override var newsData = News()
 
     // Private Fields
-    private val mainRepository = MainRepository(application)
     private val compositeDisposable = CompositeDisposable()
 
     // Public Fun
-    fun getNewsPreviews() {
+    override fun getNewsPreviews() {
         newsPreviewsDataState.value = DataLoadState.Loading
 
         val repositoryDataHandler = object : DisposableMaybeObserver<List<NewsPreview>>() {
@@ -49,13 +57,13 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
         compositeDisposable.add(
-            mainRepository.getNewsPreviews()
+            newsRepository.getNewsPreviews()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(repositoryDataHandler)
         )
     }
-    fun getNews(newsId: Long) {
+    override fun getNews(newsId: Long) {
         newsDataState.value = DataLoadState.Loading
 
         val repositoryDataHandler = object : DisposableMaybeObserver<News>() {
@@ -76,14 +84,14 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
         compositeDisposable.add(
-            mainRepository.getNews(newsId)
+            newsRepository.getNews(newsId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(repositoryDataHandler)
         )
     }
 
-    fun updateNewsPreviews() {
+    override fun updateNewsPreviews() {
         newsPreviewsDataState.value = DataLoadState.Loading
 
         val repositoryDataHandler = object : DisposableMaybeObserver<List<NewsPreview>>() {
@@ -104,13 +112,13 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
         compositeDisposable.add(
-            mainRepository.updateNewsPreviews()
+            newsRepository.updateNewsPreviews()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(repositoryDataHandler)
         )
     }
-    fun updateNews(newsId: Long) {
+    override fun updateNews(newsId: Long) {
         newsDataState.value = DataLoadState.Loading
 
         val repositoryDataHandler = object : DisposableMaybeObserver<News>() {
@@ -131,7 +139,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
 
         compositeDisposable.add(
-            mainRepository.updateNews(newsId)
+            newsRepository.updateNews(newsId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(repositoryDataHandler)

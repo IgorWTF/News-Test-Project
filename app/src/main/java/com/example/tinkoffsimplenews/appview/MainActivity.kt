@@ -4,16 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tinkoffsimplenews.R
 import com.example.tinkoffsimplenews.appviewmodel.DataLoadState
 import com.example.tinkoffsimplenews.appviewmodel.MainViewModel
+import com.example.tinkoffsimplenews.appviewmodel.NewsViewModel
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var updateLayout: FrameLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var newsViewModel: NewsViewModel
     private lateinit var newsRvAdapter: NewsRvAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +54,8 @@ class MainActivity : AppCompatActivity() {
     }
     private fun setupMainViewModel(){
         val liveDataObserver = Observer<DataLoadState> { onDataStatusChange() }
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        mainViewModel.newsPreviewsDataState.observe(this, liveDataObserver)
+        newsViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        newsViewModel.newsPreviewsDataState.observe(this, liveDataObserver)
     }
     private fun setupNewsRecyclerView() {
         val rvOnItemClickListener = object :OnNewsClickListener{
@@ -73,10 +72,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadNewsPreviews() {
-        mainViewModel.getNewsPreviews()
+        newsViewModel.getNewsPreviews()
     }
     private fun updateNewsPreviews() {
-        mainViewModel.updateNewsPreviews()
+        newsViewModel.updateNewsPreviews()
     }
     private fun openNews(newsId:Long){
         val newActivityIntent = Intent(this, SecondActivity::class.java)
@@ -86,10 +85,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onDataStatusChange() {
-        val dataState = mainViewModel.newsPreviewsDataState.value
+        val dataState = newsViewModel.newsPreviewsDataState.value
+        val data = newsViewModel.newsPreviewsData
 
         emptyContentLayout.visibility =
-            if (mainViewModel.newsPreviewsData.size == 0) View.VISIBLE
+            if (data.size == 0) View.VISIBLE
             else View.INVISIBLE
 
         swipeRefreshLayout.isRefreshing = (dataState == DataLoadState.Loading)
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
         if (dataState == DataLoadState.Loaded) {
             newsPreviews.clear()
-            newsPreviews.addAll(mainViewModel.newsPreviewsData)
+            newsPreviews.addAll(data)
             newsRvAdapter.notifyDataSetChanged()
         }
     }

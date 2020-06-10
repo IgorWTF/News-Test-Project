@@ -12,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tinkoffsimplenews.R
 import com.example.tinkoffsimplenews.appviewmodel.DataLoadState
 import com.example.tinkoffsimplenews.appviewmodel.MainViewModel
-import com.example.tinkoffsimplenews.datamodel.News
 import kotlinx.android.synthetic.main.activity_second.*
 import kotlinx.android.synthetic.main.activity_second.view.*
 import java.text.SimpleDateFormat
@@ -34,7 +33,7 @@ class SecondActivity : AppCompatActivity() {
     private lateinit var loadingLayout:FrameLayout
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainMainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,19 +63,19 @@ class SecondActivity : AppCompatActivity() {
     }
     private fun setupMainViewModel() {
         val liveDataHandler = Observer<DataLoadState> { onDataStatusChange() }
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        mainViewModel.newsDataState.observe(this, liveDataHandler)
+        mainMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mainMainViewModel.newsDataState.observe(this, liveDataHandler)
     }
 
     private fun loadNews(newsId: Long) {
-        mainViewModel.getNews(newsId)
+        mainMainViewModel.getNews(newsId)
     }
     private fun updateNews(newsId: Long){
-        mainViewModel.updateNews(newsId)
+        mainMainViewModel.updateNews(newsId)
     }
 
     private fun onDataStatusChange() {
-        val dataState = mainViewModel.newsDataState.value
+        val dataState = mainMainViewModel.newsDataState.value
 
         loadingLayout.visibility =
             if (dataState == DataLoadState.NotLoaded || dataState == DataLoadState.Error)
@@ -98,10 +97,10 @@ class SecondActivity : AppCompatActivity() {
         }
 
         if (dataState == DataLoadState.Loaded) {
-            newsTitle.text = mainViewModel.newsData.text
-            newsContent.text = mainViewModel.newsData.content
+            newsTitle.text = mainMainViewModel.newsData.text
+            newsContent.text = mainMainViewModel.newsData.content
             newsDate.text = SimpleDateFormat("dd.MM.yy")
-                .format(Date(mainViewModel.newsData.creationDate))
+                .format(Date(mainMainViewModel.newsData.creationDate))
         }
     }
 }
