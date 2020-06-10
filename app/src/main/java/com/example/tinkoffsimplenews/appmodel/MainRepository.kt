@@ -1,17 +1,12 @@
 package com.example.tinkoffsimplenews.appmodel
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.tinkoffsimplenews.app.App
 import com.example.tinkoffsimplenews.appmodel.localDataSource.NewsLocalDataSource
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
 import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
+import com.example.tinkoffsimplenews.service.DataMapperService
 import com.example.tinkoffsimplenews.service.NetService
 import io.reactivex.Maybe
 import javax.inject.Inject
