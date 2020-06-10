@@ -1,6 +1,7 @@
 package com.example.tinkoffsimplenews.dagger
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.example.tinkoffsimplenews.app.App
 import com.example.tinkoffsimplenews.appmodel.MainRepository
@@ -21,7 +22,7 @@ import javax.inject.Singleton
 class AppModule(private val application:Application) {
     @Singleton
     @Provides
-    fun provideApplication(): Application = application
+    fun provideAppContext(): Context = application
 
     @Singleton
     @Provides

@@ -1,6 +1,7 @@
 package com.example.tinkoffsimplenews.appmodel
 
 import android.app.Application
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.util.Log
@@ -22,7 +23,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     }
 
     // Public Fields
-    @Inject lateinit var application: Application
+    @Inject lateinit var appContext: Context
     @Inject lateinit var newsLocalDataSource: NewsLocalDataSource
     @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
 
@@ -53,7 +54,7 @@ class MainRepository @Inject constructor() : NewsRepository {
 
     override fun updateNewsPreviews():  Maybe<List<NewsPreview>> {
         if (!hasNetwork()) {
-            Toast.makeText(application, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNewsPreviews()
                 .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
                 .map { sortNewsPreviewsByPublicationDate(it) }
@@ -66,7 +67,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     }
     override fun updateNews(newsId: Long):  Maybe<News>{
         if(!hasNetwork()) {
-            Toast.makeText(application, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNews(newsId)
                 .map { DataMapperService.mapNewsEntityToModel(it) }
         }
@@ -92,7 +93,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     }
 
     private fun hasNetwork(): Boolean {
-        val connMgr = getSystemService(application,ConnectivityManager::class.java)
+        val connMgr = getSystemService(appContext,ConnectivityManager::class.java)
         val networkInfo: NetworkInfo? = connMgr?.activeNetworkInfo
         return networkInfo?.isConnected == true
     }
