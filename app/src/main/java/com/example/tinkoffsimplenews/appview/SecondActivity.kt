@@ -20,11 +20,13 @@ import java.util.*
 
 class SecondActivity : AppCompatActivity() {
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     companion object{
         const val NEWS_ID = "news_id"
     }
 
+    // -----------------------------------------------------------------------------------
     // Private Fields
     private var newsId: Long = 0
     private lateinit var newsTitle: TextView
@@ -37,6 +39,7 @@ class SecondActivity : AppCompatActivity() {
 
     private lateinit var mainMainViewModel: MainViewModel
 
+    // -----------------------------------------------------------------------------------
     // AppCompatActivity implementation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,7 @@ class SecondActivity : AppCompatActivity() {
         onDataStatusChange()
     }
 
+    // -----------------------------------------------------------------------------------
     // Private Fun
     private fun setupUI() {
         newsTitle = constraintLayout.newsTitle

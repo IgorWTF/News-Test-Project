@@ -9,14 +9,17 @@ import javax.inject.Inject
 
 class MainNetService @Inject constructor(): NetService {
 
+    // -----------------------------------------------------------------------------------
     // Init
     init {
         App.appComponent.inject(this)
     }
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var appContext: Context
 
+    // -----------------------------------------------------------------------------------
     // Public Fun
     override fun hasNetwork(): Boolean {
         val connMgr = ContextCompat.getSystemService(appContext, ConnectivityManager::class.java)

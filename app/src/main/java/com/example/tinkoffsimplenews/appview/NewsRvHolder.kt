@@ -9,12 +9,16 @@ import java.util.*
 
 class NewsRvHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    // -----------------------------------------------------------------------------------
+    // Private Fields
     private val newsLayout = itemView
     private val newsText = itemView.newsText
     private val newsPublicationData = itemView.newsData
 
     private var id:Long = 0
 
+    // -----------------------------------------------------------------------------------
+    // Public Fun
     fun bind(newsPreviewData: NewsPreview, onNewsClickListener: OnNewsClickListener){
         id = newsPreviewData.id
 

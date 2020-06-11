@@ -17,18 +17,21 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class MainViewModel(application: Application): AndroidViewModel(application), NewsViewModel {
-
+    // -----------------------------------------------------------------------------------
     // Init
     init {
         App.appComponent.inject(this)
     }
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var newsRepository: NewsRepository
 
+    // -----------------------------------------------------------------------------------
     // Private Fields
     private val compositeDisposable = CompositeDisposable()
 
+    // -----------------------------------------------------------------------------------
     // NewsViewModel implementation
     override var newsPreviewsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
     override var newsPreviewsData = ArrayList<NewsPreview>()
@@ -36,6 +39,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), Ne
     override var newsDataState = MutableLiveData<DataLoadState>(DataLoadState.NotLoaded)
     override var newsData = News()
 
+    // -----------------------------------------------------------------------------------
     // Public Fun
     override fun getNewsPreviews() {
         newsPreviewsDataState.value = DataLoadState.Loading
@@ -147,6 +151,7 @@ class MainViewModel(application: Application): AndroidViewModel(application), Ne
         )
     }
 
+    // -----------------------------------------------------------------------------------
     // Override
     override fun onCleared() {
         super.onCleared()

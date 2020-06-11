@@ -9,6 +9,7 @@ import com.example.tinkoffsimplenews.datapojo.NewsPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
 
 object DataMapperService {
+    // -----------------------------------------------------------------------------------
     // News.
     fun mapNewsPojoToModel(newsPojo: NewsPOJO): News {
         return News(
@@ -56,35 +57,37 @@ object DataMapperService {
         )
     }
 
+    // -----------------------------------------------------------------------------------
     // News Collections.
     fun mapNewsPojoToModel(newsPojo: List<NewsPOJO>): List<News> {
         val news = ArrayList<News>()
-        newsPojo.forEach{news.add(
-            mapNewsPojoToModel(
-                it
+        newsPojo.forEach {
+            news.add(
+                mapNewsPojoToModel(it)
             )
-        )}
+        }
         return news
     }
     fun mapNewsEntityToModel(newsEntity: List<NewsEntity>): List<News> {
         val news = ArrayList<News>()
-        newsEntity.forEach{news.add(
-            mapNewsEntityToModel(
-                it
+        newsEntity.forEach {
+            news.add(
+                mapNewsEntityToModel(it)
             )
-        )}
+        }
         return news
     }
     fun mapNewsModelToEntity(news: List<News>): List<NewsEntity> {
         val newsEntity = ArrayList<NewsEntity>()
-        news.forEach{newsEntity.add(
-            mapNewsModelToEntity(
-                it
+        news.forEach {
+            newsEntity.add(
+                mapNewsModelToEntity(it)
             )
-        )}
+        }
         return newsEntity
     }
 
+    // -----------------------------------------------------------------------------------
     // News Previews.
     fun mapNewsPreviewPojoToModel(newsPreviewPojo: NewsPreviewPOJO): NewsPreview {
         return NewsPreview(
@@ -114,32 +117,33 @@ object DataMapperService {
         )
     }
 
+    // -----------------------------------------------------------------------------------
     // News Previews Collections.
     fun mapNewsPreviewPojoToModel(newsPreviewsPojo: List<NewsPreviewPOJO>): List<NewsPreview> {
         val newsPreviews = ArrayList<NewsPreview>()
-        newsPreviewsPojo.forEach{newsPreviews.add(
-            mapNewsPreviewPojoToModel(
-                it
+        newsPreviewsPojo.forEach {
+            newsPreviews.add(
+                mapNewsPreviewPojoToModel(it)
             )
-        )}
-        return  newsPreviews
+        }
+        return newsPreviews
     }
     fun mapNewsPreviewEntityToModel(newsPreviewsEntity: List<NewsPreviewEntity>): List<NewsPreview> {
         val newsPreviews = ArrayList<NewsPreview>()
-        newsPreviewsEntity.forEach{newsPreviews.add(
-            mapNewsPreviewEntityToModel(
-                it
+        newsPreviewsEntity.forEach {
+            newsPreviews.add(
+                mapNewsPreviewEntityToModel(it)
             )
-        )}
-        return  newsPreviews
+        }
+        return newsPreviews
     }
     fun mapNewsPreviewModelToEntity(newsPreviews: List<NewsPreview>): List<NewsPreviewEntity> {
         val newsPreviewsEntity = ArrayList<NewsPreviewEntity>()
-        newsPreviews.forEach{newsPreviewsEntity.add(
-            mapNewsPreviewModelToEntity(
-                it
+        newsPreviews.forEach {
+            newsPreviewsEntity.add(
+                mapNewsPreviewModelToEntity(it)
             )
-        )}
+        }
         return newsPreviewsEntity
     }
 }

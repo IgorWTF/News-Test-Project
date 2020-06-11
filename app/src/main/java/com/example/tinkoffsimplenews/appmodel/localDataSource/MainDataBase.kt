@@ -7,6 +7,8 @@ import com.example.tinkoffsimplenews.dataentity.NewsPreviewEntity
 
 @Database(entities = [NewsEntity::class, NewsPreviewEntity::class], version = 1)
 abstract class MainDataBase : RoomDatabase(), NewsDataBase {
+    // -----------------------------------------------------------------------------------
+    // Public Fields
     abstract override fun newsDao(): NewsDao?
     abstract override fun newsPreviewDao(): NewsPreviewDao?
 }

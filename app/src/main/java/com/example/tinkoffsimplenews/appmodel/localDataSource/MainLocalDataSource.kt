@@ -9,20 +9,24 @@ import javax.inject.Inject
 
 
 class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
+    // -----------------------------------------------------------------------------------
     // Init
     init {
         App.appComponent.inject(this)
     }
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var newsDataBase: NewsDataBase
 
+    // -----------------------------------------------------------------------------------
     // Private Fields
     private var isLoadedNewsPreviews = false
 
     private var loadedNewsPreviews = ArrayList<NewsPreviewEntity>()
     private val loadeNews = HashMap<Long, NewsEntity>()
 
+    // -----------------------------------------------------------------------------------
     // NewsLocalDataSource Implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreviewEntity>> {
         return Maybe.just(Unit)
@@ -42,6 +46,7 @@ class MainLocalDataSource @Inject constructor(): NewsLocalDataSource {
         saveNewsToBd(news)
     }
 
+    // -----------------------------------------------------------------------------------
     // Private Fun
     private fun loadNewsPreviews(): Maybe<List<NewsPreviewEntity>> {
         if(isLoadedNewsPreviews) {

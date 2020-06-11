@@ -14,7 +14,8 @@ class NewsRvAdapter(private val context: Context,
                     private val onNewsClickListener: OnNewsClickListener):
     RecyclerView.Adapter<NewsRvHolder>() {
 
-    // region Override
+    // -----------------------------------------------------------------------------------
+    // Override
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsRvHolder {
         val layoutInflater = LayoutInflater.from(context)
@@ -29,6 +30,4 @@ class NewsRvAdapter(private val context: Context,
     override fun getItemCount(): Int {
         return  newsPreviews.size
     }
-
-    // endregion
 }

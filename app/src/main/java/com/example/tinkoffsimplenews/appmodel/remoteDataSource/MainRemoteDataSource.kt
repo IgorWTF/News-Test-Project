@@ -9,14 +9,17 @@ import javax.inject.Inject
 
 class MainRemoteDataSource @Inject constructor() : NewsRemoteDataSource {
 
+    // -----------------------------------------------------------------------------------
     // Init
     init {
         App.appComponent.inject(this)
     }
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var newsApiService:NewsApiService
 
+    // -----------------------------------------------------------------------------------
     // NewsRemoteDataSource implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
         return Maybe.just(Unit)
@@ -27,6 +30,7 @@ class MainRemoteDataSource @Inject constructor() : NewsRemoteDataSource {
             .flatMap { loadNews(newsId) }
     }
 
+    // -----------------------------------------------------------------------------------
     // Private Fun
     private fun loadNewsPreviews(): Maybe<List<NewsPreviewPOJO>> {
         val response =

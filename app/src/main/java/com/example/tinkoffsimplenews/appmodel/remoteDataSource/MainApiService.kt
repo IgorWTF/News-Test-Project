@@ -11,25 +11,29 @@ import retrofit2.http.Query
 import javax.inject.Inject
 
 class MainApiService(): NewsApiService{
-    private val service = Retrofit.Builder()
-        .baseUrl("https://api.tinkoff.ru/v1/")
-        .addConverterFactory(GsonConverterFactory.create())
-        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .build().create(APIService::class.java)
-
-    override fun loadNewsPreviews(): Response<NewsPreviewsResultPOJO?> {
-        return service.getNewsPreviews().execute()
-    }
-
-    override fun loadNews(newsId: Long): Response<NewsResultPOJO?> {
-        return service.getNews(newsId).execute()
-    }
-
+    // -----------------------------------------------------------------------------------
+    //Api Service
     interface APIService {
         @GET("https://api.tinkoff.ru/v1/news/")
         fun getNewsPreviews(): Call<NewsPreviewsResultPOJO?>
 
         @GET("https://api.tinkoff.ru/v1/news_content/")
         fun getNews(@Query("id") newsId: Long): Call<NewsResultPOJO?>
+    }
+
+    private val service = Retrofit.Builder()
+        .baseUrl("https://api.tinkoff.ru/v1/")
+        .addConverterFactory(GsonConverterFactory.create())
+        //.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build().create(APIService::class.java)
+
+    // -----------------------------------------------------------------------------------
+    // NewsApiService implementation
+    override fun loadNewsPreviews(): Response<NewsPreviewsResultPOJO?> {
+        return service.getNewsPreviews().execute()
+    }
+
+    override fun loadNews(newsId: Long): Response<NewsResultPOJO?> {
+        return service.getNews(newsId).execute()
     }
 }

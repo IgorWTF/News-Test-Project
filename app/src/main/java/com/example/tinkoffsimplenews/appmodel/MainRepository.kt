@@ -13,17 +13,20 @@ import javax.inject.Inject
 
 
 class MainRepository @Inject constructor() : NewsRepository {
+    // -----------------------------------------------------------------------------------
     // Init
     init {
         App.appComponent.inject(this)
     }
 
+    // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var netService: NetService
     @Inject lateinit var newsLocalDataSource: NewsLocalDataSource
     @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
 
 
+    // -----------------------------------------------------------------------------------
     // NewsRepository implementation
     override fun getNewsPreviews(): Maybe<List<NewsPreview>> {
         Log.d("MAIN_REPOSITORY", "getNewsPreviews")
@@ -73,6 +76,7 @@ class MainRepository @Inject constructor() : NewsRepository {
             .doOnSuccess { saveNewsToLocalDataSource(it) }
     }
 
+    // -----------------------------------------------------------------------------------
     // Private Fun
     private fun sortNewsPreviewsByPublicationDate(newsPreviews: List<NewsPreview>) : List<NewsPreview> {
         Log.d("MAIN_REPOSITORY", "sortedNewsPreviews (${newsPreviews.size})")
