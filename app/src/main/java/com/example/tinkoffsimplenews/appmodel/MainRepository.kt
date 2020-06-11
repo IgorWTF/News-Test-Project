@@ -22,6 +22,7 @@ class MainRepository @Inject constructor() : NewsRepository {
     // -----------------------------------------------------------------------------------
     // Public Fields
     @Inject lateinit var netService: NetService
+    @Inject lateinit var dataMapperService: DataMapperService
     @Inject lateinit var newsLocalDataSource: NewsLocalDataSource
     @Inject lateinit var newsRemoteDataSource: NewsRemoteDataSource
 
@@ -31,11 +32,11 @@ class MainRepository @Inject constructor() : NewsRepository {
     override fun getNewsPreviews(): Maybe<List<NewsPreview>> {
         Log.d("MAIN_REPOSITORY", "getNewsPreviews")
         return newsLocalDataSource.getNewsPreviews()
-            .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
+            .map { dataMapperService.mapNewsPreviewEntityToModel(it) }
             .map { sortNewsPreviewsByPublicationDate(it) }
             .switchIfEmpty(
                 newsRemoteDataSource.getNewsPreviews()
-                    .map { DataMapperService.mapNewsPreviewPojoToModel(it) }
+                    .map { dataMapperService.mapNewsPreviewPojoToModel(it) }
                     .doOnSuccess { saveNewsPreviewsToLocalDataSource(it) }
                     .map { sortNewsPreviewsByPublicationDate(it) }
             )
@@ -43,10 +44,10 @@ class MainRepository @Inject constructor() : NewsRepository {
     override fun getNews(newsId: Long):  Maybe<News> {
         Log.d("MAIN_REPOSITORY", "getNews")
         return newsLocalDataSource.getNews(newsId)
-            .map { DataMapperService.mapNewsEntityToModel(it) }
+            .map { dataMapperService.mapNewsEntityToModel(it) }
             .switchIfEmpty(
                 newsRemoteDataSource.getNews(newsId)
-                    .map { DataMapperService.mapNewsPojoToModel(it) }
+                    .map { dataMapperService.mapNewsPojoToModel(it) }
                     .doOnSuccess { saveNewsToLocalDataSource(it) }
             )
     }
@@ -55,12 +56,12 @@ class MainRepository @Inject constructor() : NewsRepository {
         if (!netService.hasNetwork()) {
             //Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNewsPreviews()
-                .map { DataMapperService.mapNewsPreviewEntityToModel(it) }
+                .map { dataMapperService.mapNewsPreviewEntityToModel(it) }
                 .map { sortNewsPreviewsByPublicationDate(it) }
         }
 
         return newsRemoteDataSource.getNewsPreviews()
-            .map { DataMapperService.mapNewsPreviewPojoToModel(it) }
+            .map { dataMapperService.mapNewsPreviewPojoToModel(it) }
             .doOnSuccess { saveNewsPreviewsToLocalDataSource(it) }
             .map { sortNewsPreviewsByPublicationDate(it) }
     }
@@ -68,11 +69,11 @@ class MainRepository @Inject constructor() : NewsRepository {
         if(!netService.hasNetwork()) {
             //Toast.makeText(appContext, "Не удалось обновить данные.", Toast.LENGTH_SHORT).show()
             return newsLocalDataSource.getNews(newsId)
-                .map { DataMapperService.mapNewsEntityToModel(it) }
+                .map { dataMapperService.mapNewsEntityToModel(it) }
         }
 
         return newsRemoteDataSource.getNews(newsId)
-            .map { DataMapperService.mapNewsPojoToModel(it) }
+            .map { dataMapperService.mapNewsPojoToModel(it) }
             .doOnSuccess { saveNewsToLocalDataSource(it) }
     }
 
@@ -85,10 +86,10 @@ class MainRepository @Inject constructor() : NewsRepository {
 
     private fun saveNewsPreviewsToLocalDataSource(newsPreviews: List<NewsPreview>) {
         newsLocalDataSource
-            .saveNewsPreviews(DataMapperService.mapNewsPreviewModelToEntity(newsPreviews))
+            .saveNewsPreviews(dataMapperService.mapNewsPreviewModelToEntity(newsPreviews))
     }
     private fun saveNewsToLocalDataSource(news: News) {
         newsLocalDataSource
-            .saveNews(DataMapperService.mapNewsModelToEntity(news))
+            .saveNews(dataMapperService.mapNewsModelToEntity(news))
     }
 }

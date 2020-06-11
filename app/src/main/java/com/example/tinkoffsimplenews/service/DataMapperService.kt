@@ -7,8 +7,9 @@ import com.example.tinkoffsimplenews.datamodel.News
 import com.example.tinkoffsimplenews.datamodel.NewsPreview
 import com.example.tinkoffsimplenews.datapojo.NewsPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
+import javax.inject.Inject
 
-object DataMapperService {
+class DataMapperService @Inject constructor() {
     // -----------------------------------------------------------------------------------
     // News.
     fun mapNewsPojoToModel(newsPojo: NewsPOJO): News {

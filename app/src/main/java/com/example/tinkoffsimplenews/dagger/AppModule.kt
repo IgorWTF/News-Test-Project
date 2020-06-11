@@ -14,6 +14,7 @@ import com.example.tinkoffsimplenews.appmodel.remoteDataSource.MainApiService
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.MainRemoteDataSource
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsApiService
 import com.example.tinkoffsimplenews.appmodel.remoteDataSource.NewsRemoteDataSource
+import com.example.tinkoffsimplenews.service.DataMapperService
 import com.example.tinkoffsimplenews.service.MainNetService
 import com.example.tinkoffsimplenews.service.NetService
 import dagger.Module
@@ -49,4 +50,8 @@ class AppModule(private val application:Application) {
     @Singleton
     @Provides
     fun provideNetService(): NetService = MainNetService()
+
+    @Singleton
+    @Provides
+    fun provideDataMapperService(): DataMapperService = DataMapperService()
 }

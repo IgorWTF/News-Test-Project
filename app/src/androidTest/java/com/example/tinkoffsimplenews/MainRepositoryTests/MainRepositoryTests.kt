@@ -8,6 +8,7 @@ import com.example.tinkoffsimplenews.dataentity.NewsEntity
 import com.example.tinkoffsimplenews.dataentity.NewsPreviewEntity
 import com.example.tinkoffsimplenews.datapojo.NewsPOJO
 import com.example.tinkoffsimplenews.datapojo.NewsPreviewPOJO
+import com.example.tinkoffsimplenews.service.DataMapperService
 import com.example.tinkoffsimplenews.service.NetService
 import io.reactivex.Maybe
 import org.junit.Assert
@@ -65,6 +66,7 @@ class MainRepositoryTests {
         val mainRepository = MainRepository()
 
         mainRepository.apply {
+            dataMapperService = DataMapperService()
             netService = fakeNetService
             newsLocalDataSource = fakeLDataSource
             newsRemoteDataSource = fakeRDataSource
@@ -120,6 +122,7 @@ class MainRepositoryTests {
         val mainRepository = MainRepository()
 
         mainRepository.apply {
+            dataMapperService = DataMapperService()
             netService = fakeNetService
             newsLocalDataSource = fakeLDataSource
             newsRemoteDataSource = fakeRDataSource
