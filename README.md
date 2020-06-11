@@ -13,8 +13,8 @@ Passes requests to the main repository using RxJava. Contains MuttableLiveData
 ## MainRepository : NewsRepository
 Sends data requests to LocalDataSource. If necessary, uses RemoteDataSource while updating LocalDataSource. Processes data using DataMapperService. Uses RxJava.
 
-## LocalDataSource : NewsLocalDataSource
+## MainLocalDataSource : NewsLocalDataSource
 Works with a database using Room. Uses RxJava
 
-## RemoteDataSource : NewsRemoteDataSource
+## MainRemoteDataSource : NewsRemoteDataSource
 Downloaded data from the network using Retrofit. Uses RxJava
