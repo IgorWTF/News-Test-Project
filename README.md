@@ -1,6 +1,8 @@
 ## Tinkoff News - test task
 MVVM + Kotlin + Room + Retrofit + RxJava + Dagger
 
+![TitleImage](https://user-images.githubusercontent.com/26382897/84543334-9fca2e00-ad14-11ea-8dc0-55ea49bf4648.png)
+
 ## MainActivity
 Contains RecyclerView and SwipeRefreshLayout. Sends requests to the NewsViewModel and responds to updates in the NewsViewModel. When you click on a news item, it opens SecondActivity and gives it the news ID.
 
